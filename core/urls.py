@@ -25,6 +25,7 @@ urlpatterns = [
 
     path('accounts/v1/api/', include('accounts.urls', namespace='accounts_v1')),
     path('profiles/v1/api/', include('profiles.urls', namespace='profiles_v1')),
+    path('events/v1/api/', include('events.urls', namespace='events_v1')),
 ]
 
 # Spectacular URLs

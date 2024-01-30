@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from master_records.models import EventCategory
+from master_records.models import EventCategory, CodeTubbiesBaseModel
 
 
-class Speakers(models.Model):
+class Speaker(CodeTubbiesBaseModel):
     name = models.CharField(max_length=100)
     designation = models.CharField(max_length=100)
 
@@ -12,16 +12,16 @@ class Speakers(models.Model):
         return self.name
 
 
-class Events(models.Model):
+class Event(CodeTubbiesBaseModel):
     category = models.ForeignKey(EventCategory, on_delete=models.PROTECT)
     topic = models.CharField(max_length=200)
     start_on = models.DateTimeField()
-    speakers = models.ManyToOneRel("speakers", Speakers, "name")
+    speakers = models.ManyToOneRel("speakers", Speaker, "name")
 
     def __str__(self):
         return self.topic
 
 
-class Participant(models.Model):
-    event = models.ForeignKey(Events, on_delete=models.CASCADE)
+class Participant(CodeTubbiesBaseModel):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
