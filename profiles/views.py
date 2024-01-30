@@ -1,21 +1,22 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import render
+from rest_framework import status
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from profiles.models import Profile
-
+from profiles.serializers import DashboardSerializer
 
 User = get_user_model()
 
 
-class Dashboard(APIView):
-    permission_classes = (IsAuthenticated, )
+class DashboardAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
 
-    def post(self, request):
-        return Response({"data": "success"})
+    def get(self, request):
+        serializer = DashboardSerializer(request.user)
+        return Response({"result": serializer.data}, status=status.HTTP_200_OK)
 
 
 class ProfileAPIView(RetrieveUpdateAPIView):
