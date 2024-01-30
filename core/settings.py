@@ -39,6 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
+
+    'accounts',
+    'events',
+    'master_records',
+    'practice',
+    'profiles',
 ]
 
 MIDDLEWARE = [
@@ -49,7 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'core.utils.response_builder.BaseAPIResponseMiddleware',
+    'utils.response_builder.BaseAPIResponseMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -71,6 +79,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
+
+AUTH_USER_MODEL = "accounts.User"
 
 
 # Database
@@ -125,19 +135,49 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# https://www.django-rest-framework.org/api-guide/versioning/#configuring-the-versioning-scheme
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'DEFAULT_PAGINATION_CLASS': 'utils.paginator.RestPagination',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-# https://www.django-rest-framework.org/api-guide/versioning/#configuring-the-versioning-scheme
-REST_FRAMEWORK = {
-    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
-    'DEFAULT_PAGINATION_CLASS': 'core.utils.RestPagination'
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_DIST': 'SIDECAR',
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+    # OTHER SETTINGS
+
 }
+
+SIMPLE_JWT = {
+  "TOKEN_OBTAIN_SERIALIZER": "accounts.serializers.UserTokenObtainPairSerializer",
+}
+
+# Email Config
+EMAIL_USE_TLS = True
+
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_PORT = 587
+
+EMAIL_HOST_USER = 'gigiljacob93@gmail.com'
+
+EMAIL_HOST_PASSWORD = 'gigiljacob93@gmail.com'
+
+APPEND_SLASH = False
 
 try:
     from core.machine_config import *
