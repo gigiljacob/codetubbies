@@ -57,7 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'utils.response_builder.BaseAPIResponseMiddleware',
+    'core.middleware.response_builder.BaseAPIResponseMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -146,7 +146,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
-    'DEFAULT_PAGINATION_CLASS': 'utils.paginator.RestPagination',
+    'DEFAULT_PAGINATION_CLASS': 'core.config.paginator.RestPagination',
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
@@ -180,7 +180,7 @@ EMAIL_HOST_PASSWORD = 'gigiljacob93@gmail.com'
 APPEND_SLASH = False
 
 try:
-    from core.machine_config import *
+    from core.config.machine_config import *
 except ImportError:
     print("Missing config file...!")
     exit()
